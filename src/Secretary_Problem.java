@@ -5,42 +5,47 @@ import java.util.List;
 public class Secretary_Problem {
 
     public static void main(String[] args) {
-        double SCOUTING_RATIO = 0.37;
-        List<Integer> applicants = getApplicants();
-        int applicantsAutoSkipped = (int) (applicants.size() * SCOUTING_RATIO);
-        int maxSoFar = -1;
-        int selectedApplicant = -1;
-        int bestApplicant = Collections.max(applicants);
-        for (int i = 0; i < applicantsAutoSkipped; i++) {
-            int currentApplicant = applicants.get(i);
-            if (currentApplicant > maxSoFar) {
-                maxSoFar = currentApplicant;
-            }
-            applicants.remove(i);
-        }
-        for (int i = 0; i < applicants.size(); i++) {
-            int currentApplicant = applicants.get(i);
-            if (currentApplicant > maxSoFar) {
-                selectedApplicant = currentApplicant;
-                break;
-            } else {
-                if (i == applicants.size() - 1) {
-                    selectedApplicant = currentApplicant;
-                }
-            }
-        }
 
-        System.out.println("Best applicant: " + bestApplicant + "\nSelected applicant: " + selectedApplicant);
+        List<Integer> applicantPool = getApplicants(10);
+        System.out.println("Applicants: " + applicantPool);
+        int applicantsAutoSkipped = (int) Math.round(applicantPool.size() / Math.exp(1.0));
+        int bestApplicant = Collections.max(applicantPool);
+        int selectedApplicant = runInterviews(applicantsAutoSkipped, applicantPool);
+        System.out.println("Best applicant: " + bestApplicant + "\nSelected applicant:" + selectedApplicant);
     }
 
-    private static List<Integer> getApplicants() {
-        List<Integer> applicants = new LinkedList<>();
-        while (applicants.size() < 10) {
-            int newApplicant = (int) (Math.random() * 10);
-            if (!applicants.contains(newApplicant)) {
-                applicants.add(newApplicant);
+    private static int runInterviews(int applicantsAutoSkipped, List<Integer> applicantPool) {
+        int bestSeen = -1;
+
+        for (int i = 0; i < applicantsAutoSkipped; i++) {
+            int currentApplicant = applicantPool.get(0);
+            if (currentApplicant > bestSeen) {
+                bestSeen = currentApplicant;
+            }
+            applicantPool.remove(0);
+        }
+        return selectSecretary(applicantPool, bestSeen);
+    }
+
+    private static int selectSecretary(List<Integer> applicantPool, int bestSeen) {
+        int finalApplicantIndex = applicantPool.size() - 1;
+        for (int i = 0; i <= finalApplicantIndex; i++) {
+            int currentApplicant = applicantPool.get(i);
+            if (currentApplicant > bestSeen) {
+                return currentApplicant;
             }
         }
-        return applicants;
+        return applicantPool.get(finalApplicantIndex);
+    }
+
+    private static List<Integer> getApplicants(int numApplicants) {
+        List<Integer> applicantPool = new LinkedList<>();
+        while (applicantPool.size() < numApplicants) {
+            int newApplicant = (int) (Math.random() * 10);
+            if (!applicantPool.contains(newApplicant)) {
+                applicantPool.add(newApplicant);
+            }
+        }
+        return applicantPool;
     }
 }
