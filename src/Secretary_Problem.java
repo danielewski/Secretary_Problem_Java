@@ -8,10 +8,22 @@ public class Secretary_Problem {
 
         List<Integer> applicantPool = getApplicants(10);
         System.out.println("Applicants: " + applicantPool);
-        int applicantsAutoSkipped = (int) Math.round(applicantPool.size() / Math.exp(1.0));
+        double eulersNumber = Math.exp(1.0);
+        int applicantsAutoSkipped = (int) Math.round(applicantPool.size() / eulersNumber);
         int bestApplicant = Collections.max(applicantPool);
         int selectedApplicant = runInterviews(applicantsAutoSkipped, applicantPool);
         System.out.println("Best applicant: " + bestApplicant + "\nSelected applicant:" + selectedApplicant);
+    }
+
+    private static List<Integer> getApplicants(int numApplicants) {
+        List<Integer> applicantPool = new LinkedList<>();
+        while (applicantPool.size() < numApplicants) {
+            int newApplicant = (int) (Math.random() * numApplicants);
+            if (!applicantPool.contains(newApplicant)) {
+                applicantPool.add(newApplicant);
+            }
+        }
+        return applicantPool;
     }
 
     private static int runInterviews(int applicantsAutoSkipped, List<Integer> applicantPool) {
@@ -36,16 +48,5 @@ public class Secretary_Problem {
             }
         }
         return applicantPool.get(finalApplicantIndex);
-    }
-
-    private static List<Integer> getApplicants(int numApplicants) {
-        List<Integer> applicantPool = new LinkedList<>();
-        while (applicantPool.size() < numApplicants) {
-            int newApplicant = (int) (Math.random() * 10);
-            if (!applicantPool.contains(newApplicant)) {
-                applicantPool.add(newApplicant);
-            }
-        }
-        return applicantPool;
     }
 }
