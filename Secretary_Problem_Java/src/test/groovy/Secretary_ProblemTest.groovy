@@ -54,4 +54,25 @@ class Secretary_ProblemTest extends Specification {
         twentyOneApplicantsResult == 8
         oneHundredApplicantsResult == 37
     }
+
+    def "selectSecretary returns the algorithmically correct applicant"() {
+        given:
+        List<Integer> emptyApplicantPool = []
+        List<Integer> orderedApplicantPool = 36..100
+        List<Integer> revOrderedApplicantPool = 62..0
+        List<Integer> unorderedApplicantPool = [19, 3, 33, 5, 22, 4, 11, 98, 52, 6]
+        Secretary_Problem secretaryProblem = new Secretary_Problem()
+
+        when:
+        int emptyApplicantPoolSelection = secretaryProblem.selectSecretary(emptyApplicantPool, 20)
+        int orderedApplicantPoolSelection = secretaryProblem.selectSecretary(orderedApplicantPool, 35)
+        int revOrderedApplicantPoolSelection = secretaryProblem.selectSecretary(revOrderedApplicantPool, 63)
+        int unorderedApplicantPoolSelection = secretaryProblem.selectSecretary(unorderedApplicantPool, 47)
+
+        then:
+        emptyApplicantPoolSelection == 20
+        orderedApplicantPoolSelection == 36
+        revOrderedApplicantPoolSelection == 0
+        unorderedApplicantPoolSelection == 98
+    }
 }

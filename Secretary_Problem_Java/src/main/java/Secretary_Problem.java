@@ -41,6 +41,9 @@ public class Secretary_Problem {
     }
 
     protected int selectSecretary(List<Integer> applicantPool, int bestSeen) {
+        if (applicantPool.size() == 0){
+            return bestSeen;
+        }
         int finalApplicantIndex = applicantPool.size() - 1;
         for (int i = 0; i <= finalApplicantIndex; i++) {
             int currentApplicant = applicantPool.get(i);
