@@ -3,19 +3,15 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Secretary_Problem {
-
-    public static void main(String[] args) {
-
-        List<Integer> applicantPool = getApplicants(10);
-        System.out.println("Applicants: " + applicantPool);
-        double eulersNumber = Math.exp(1.0);
-        int applicantsAutoSkipped = (int) Math.round(applicantPool.size() / eulersNumber);
+    public boolean secretaryProblem(int numApplicants) {
+        List<Integer> applicantPool = getApplicants(numApplicants);
+        int applicantsAutoSkipped = getAutoSkip(numApplicants);
         int bestApplicant = Collections.max(applicantPool);
         int selectedApplicant = runInterviews(applicantsAutoSkipped, applicantPool);
-        System.out.println("Best applicant: " + bestApplicant + "\nSelected applicant:" + selectedApplicant);
+        return bestApplicant == selectedApplicant;
     }
 
-    private static List<Integer> getApplicants(int numApplicants) {
+    protected List<Integer> getApplicants(int numApplicants) {
         List<Integer> applicantPool = new LinkedList<>();
         while (applicantPool.size() < numApplicants) {
             int newApplicant = (int) (Math.random() * numApplicants);
@@ -26,7 +22,12 @@ public class Secretary_Problem {
         return applicantPool;
     }
 
-    private static int runInterviews(int applicantsAutoSkipped, List<Integer> applicantPool) {
+    protected int getAutoSkip(int numApplicants) {
+        double eulersNumber = Math.exp(1.0);
+        return (int) Math.round(numApplicants / eulersNumber);
+    }
+
+    protected int runInterviews(int applicantsAutoSkipped, List<Integer> applicantPool) {
         int bestSeen = -1;
 
         for (int i = 0; i < applicantsAutoSkipped; i++) {
@@ -39,7 +40,7 @@ public class Secretary_Problem {
         return selectSecretary(applicantPool, bestSeen);
     }
 
-    private static int selectSecretary(List<Integer> applicantPool, int bestSeen) {
+    protected int selectSecretary(List<Integer> applicantPool, int bestSeen) {
         int finalApplicantIndex = applicantPool.size() - 1;
         for (int i = 0; i <= finalApplicantIndex; i++) {
             int currentApplicant = applicantPool.get(i);
