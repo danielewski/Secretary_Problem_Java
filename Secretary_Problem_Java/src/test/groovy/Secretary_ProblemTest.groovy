@@ -55,6 +55,22 @@ class Secretary_ProblemTest extends Specification {
         oneHundredApplicantsResult == 37
     }
 
+    def "runInterviews calls selectSecretary with correct parameters"() {
+        given:
+        def Secretary_Problem = Spy(Secretary_Problem)
+        int applicantsAutoSkipped = 4;
+        List<Integer> applicantPool = [0, 1, 2, 3, 4, 5, 6, 7]
+        List<Integer> expectedApplicantPool = [4, 5, 6, 7]
+        int bestSeen = applicantPool[3];
+
+        when:
+        Secretary_Problem.runInterviews(applicantsAutoSkipped, applicantPool)
+        Secretary_Problem.runInterviews(0, [])
+
+        then:
+        1 * Secretary_Problem.selectSecretary(expectedApplicantPool, bestSeen)
+    }
+
     def "selectSecretary returns the algorithmically correct applicant"() {
         given:
         List<Integer> emptyApplicantPool = []
